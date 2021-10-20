@@ -1,0 +1,24 @@
+.CodeMirror {
+    @apply border-2 border-gray-800 w-[700px] h-[450px] bg-gray-800 rounded p-4 shadow-md
+}
+
+.CodeMirror-cursor { border-left: 1px solid #fff; }
+.cm-fat-cursor .CodeMirror-cursor { background-color: #a2a8a175 !important; }
+.cm-animate-fat-cursor { background-color: #a2a8a175 !important; }
+
+.CodeMirror span {
+    @apply text-gray-200
+}
+
+.CodeMirror .cm-builtin {
+    @apply text-gray-200
+}
+
+.CodeMirror .cm-attribute {
+    @apply text-blue-400
+}
+
+.CodeMirror .cm-string {
+    @apply text-red-400
+}
+
