@@ -61,7 +61,7 @@ export default function Home() {
       <main className="space-y-10 mt-[100px] pb-8">
         <div className="text-center space-y-2">
           <h1 className="text-gray-700 uppercase font-bold text-3xl">web curl</h1>
-          <p className="text-gray-700">Run CURL Request from you browser.</p>
+          <p className="text-gray-700">Run CURL Request from your browser.</p>
         </div>
 
         <div className="w-full flex justify-center gap-x-6">
