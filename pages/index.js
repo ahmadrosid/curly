@@ -47,13 +47,12 @@ export default function Home() {
 
   const runRequest = (e) => {
     e.preventDefault()
-    cmOoutput.getDoc().setValue('Loading...')
-
+    
     const source = cmInput.getValue()
     if (!source) {
       return;
     }
-
+    
     let request = parseCurl(source)
     if (!request) {
       alert("no value request")
@@ -62,6 +61,7 @@ export default function Home() {
       }, null, '    '))
       return;
     }
+    cmOoutput.getDoc().setValue('Loading...')
 
     if (proxyCheckboxRef.current.checked) {
       const proxy = {
