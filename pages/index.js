@@ -90,6 +90,11 @@ export default function Home() {
   return (
     <div className="">
       <Head>
+        <meta property="og:url" content={`https://webcurl.verce.app`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Run curl request from browser" />
+        <meta property="og:description" content="Run curl request from browser" />
+        <meta property="og:image" content="/webcurl.png" />
         <title>Web Curl - Run curl request from browser</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
