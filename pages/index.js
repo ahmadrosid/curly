@@ -10,6 +10,7 @@ export default function Home() {
 
   const codeMirrorRef = useRef()
   const codeMirrorRefOut = useRef()
+  const proxyCheckboxRef = useRef()
 
   useEffect(() => {
     window.axios = axios
@@ -31,9 +32,8 @@ export default function Home() {
       const CodeMirror = require('codemirror')
       const instanceOutput = CodeMirror.fromTextArea(codeMirrorRefOut.current, {
         lineNumbers: false,
-        lineWrapping: true,
         mode: "javascript",
-        readOnly: 'nocursor'
+        readOnly: true
       })
       instanceOutput.setSize("100%", "100%")
       setCodeMirrorOut(instanceOutput)
@@ -47,18 +47,33 @@ export default function Home() {
 
   const runRequest = (e) => {
     e.preventDefault()
+    cmOoutput.getDoc().setValue('')
+
     const source = cmInput.getValue()
     if (!source) {
       return;
     }
 
-    const request = parseCurl(source)
+    let request = parseCurl(source)
     if (!request) {
       alert("no value request")
       cmOoutput.getDoc().setValue(JSON.stringify({
         error: "Failed to parse curl request!"
       }, null, '    '))
       return;
+    }
+
+    if (proxyCheckboxRef.current.checked) {
+      const proxy = {
+        data: request,
+        url: '/api/proxy',
+        method: 'POST',
+        headers: {
+          "content-type":"application/json"
+        }
+      }
+      request = proxy
+      console.log('here', request)
     }
 
     axios(request)
@@ -92,8 +107,14 @@ export default function Home() {
 
         <div className="flex flex-col gap-8 max-w-[700px] mx-auto">
           <div className="w-[700px] h-[200px] text-white">
-            <textarea ref={codeMirrorRef} placeholder="Curl goes here..."></textarea>
+            <textarea ref={codeMirrorRef} placeholder="Paste curl here..."></textarea>
           </div>
+
+          <div className="flex gap-2 items-center">
+            <input ref={proxyCheckboxRef} type="checkbox" value="off" placeholder="Use proxy" />
+            <label className="text-sm text-gray-500">Use proxy to baypass cors.</label>
+          </div>
+
           <div className="max-h-[500px] w-[700px]">
             <textarea ref={codeMirrorRefOut}></textarea>
           </div>
