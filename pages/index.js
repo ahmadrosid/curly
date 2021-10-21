@@ -97,6 +97,7 @@ export default function Home() {
         <meta property="og:image" content="/webcurl.png" />
         <title>Web Curl - Run curl request from browser</title>
         <link rel="icon" href="/favicon.ico" />
+        <script defer data-domain="webcurl.vercel.app" src="https://plausible.io/js/plausible.js"></script>
       </Head>
 
       <main className="space-y-10 mt-[100px] pb-8">
