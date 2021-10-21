@@ -69,7 +69,7 @@ export default function Home() {
         url: '/api/proxy',
         method: 'POST',
         headers: {
-          "content-type":"application/json"
+          "content-type": "application/json"
         }
       }
       request = proxy
@@ -124,8 +124,11 @@ export default function Home() {
             <textarea ref={codeMirrorRefOut}></textarea>
           </div>
         </div>
-
       </main>
+
+      <footer className="text-center">
+        <p className="text-gray-600">Created with 💖 by <a href="https://ahmadrosid.com">Ahmad Rosid</a></p>
+      </footer>
     </div>
   )
 }
