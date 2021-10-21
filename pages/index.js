@@ -47,7 +47,7 @@ export default function Home() {
 
   const runRequest = (e) => {
     e.preventDefault()
-    cmOoutput.getDoc().setValue('')
+    cmOoutput.getDoc().setValue('Loading...')
 
     const source = cmInput.getValue()
     if (!source) {
