@@ -1,18 +1,22 @@
 import axios from 'axios'
 import Head from 'next/head'
 import { useRef, useState, useEffect } from 'react'
+import { registerPlaceholderAddon } from '../lib/codemirror-placeholder'
 import parseCurl from '../lib/parse-curl'
 
 export default function Home() {
-  const [response, setResponse] = useState(false)
-  const [cmDoc, setCodeMirror] = useState(null)
+  const [cmInput, setCodeMirror] = useState(null)
+  const [cmOoutput, setCodeMirrorOut] = useState(null)
 
   const codeMirrorRef = useRef()
+  const codeMirrorRefOut = useRef()
 
   useEffect(() => {
-    if (!cmDoc) {
+    window.axios = axios
+    if (!cmInput) {
       require('codemirror/mode/shell/shell')
       const CodeMirror = require('codemirror')
+      registerPlaceholderAddon(CodeMirror)
       const instanceInput = CodeMirror.fromTextArea(codeMirrorRef.current, {
         lineNumbers: false,
         lineWrapping: true,
@@ -21,38 +25,55 @@ export default function Home() {
       instanceInput.setSize("100%", "100%")
       setCodeMirror(instanceInput)
     }
+
+    if (!cmOoutput) {
+      require('codemirror/mode/javascript/javascript')
+      const CodeMirror = require('codemirror')
+      const instanceOutput = CodeMirror.fromTextArea(codeMirrorRefOut.current, {
+        lineNumbers: false,
+        lineWrapping: true,
+        mode: "javascript",
+        readOnly: 'nocursor'
+      })
+      instanceOutput.setSize("100%", "100%")
+      setCodeMirrorOut(instanceOutput)
+    }
   }, [])
 
   const clearTextArea = () => {
-    setResponse(false)
-    cmDoc.getDoc().setValue('')
+    cmInput.getDoc().setValue('')
+    cmOoutput.getDoc().setValue('')
   }
 
   const runRequest = (e) => {
     e.preventDefault()
-    const source = cmDoc.getValue()
+    const source = cmInput.getValue()
     if (!source) {
-      setResponse(false)
       return;
     }
 
     const request = parseCurl(source)
     if (!request) {
-      setResponse({
+      alert("no value request")
+      cmOoutput.getDoc().setValue(JSON.stringify({
         error: "Failed to parse curl request!"
-      })
+      }, null, '    '))
       return;
     }
 
     axios(request)
-      .then(response => setResponse(response))
+      .then(response => {
+        cmOoutput.getDoc().setValue(JSON.stringify(response.data, null, '    '))
+      })
       .catch(err => {
-        setResponse({ err: err.message, response: err.response?.data })
+        cmOoutput.getDoc().setValue(JSON.stringify({
+          error: err.message, ...err.response?.data
+        }, null, '    '))
       })
   }
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="">
       <Head>
         <title>Web Curl - Run curl request from browser</title>
         <link rel="icon" href="/favicon.ico" />
@@ -69,19 +90,15 @@ export default function Home() {
           <button onClick={clearTextArea} className="rounded-md py-2 shadow-md w-[120px] text-gray-800 border-2 border-gray-500">Clear</button>
         </div>
 
-        <div>
-          <div className="h-[150px] w-[700px] text-white">
-            <textarea ref={codeMirrorRef}></textarea>
+        <div className="flex flex-col gap-8 max-w-[700px] mx-auto">
+          <div className="w-[700px] h-[200px] text-white">
+            <textarea ref={codeMirrorRef} placeholder="Curl goes here..."></textarea>
+          </div>
+          <div className="max-h-[500px] w-[700px]">
+            <textarea ref={codeMirrorRefOut}></textarea>
           </div>
         </div>
 
-        {response && (
-          <div className="bg-gray-800 rounded-md max-w-[700px]">
-            <pre className="p-4 text-white">
-              {JSON.stringify(response, null, '    ')}
-            </pre>
-          </div>
-        )}
       </main>
     </div>
   )

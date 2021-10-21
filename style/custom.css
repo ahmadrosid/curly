@@ -18,6 +18,14 @@
     @apply text-blue-400
 }
 
+.CodeMirror .cm-atom {
+    @apply text-blue-400
+}
+
+.CodeMirror .cm-number {
+    @apply text-green-400
+}
+
 .CodeMirror .cm-string {
     @apply text-red-400
 }
