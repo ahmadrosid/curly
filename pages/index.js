@@ -127,7 +127,7 @@ export default function Home() {
       </main>
 
       <footer className="text-center">
-        <p className="text-gray-600">Created with 💖 by <a href="https://ahmadrosid.com">Ahmad Rosid</a></p>
+        <p className="text-gray-600">Created with 💖 by <a href="https://ahmadrosid.com" className="font-semibold text-pink-600">Ahmad Rosid</a></p>
       </footer>
     </div>
   )
