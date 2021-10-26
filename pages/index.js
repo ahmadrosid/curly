@@ -9,7 +9,8 @@ export default function Home() {
   const [cmOoutput, setCodeMirrorOut] = useState(null)
   const [isCopied, setCopied] = useState(false)
   const [isCopiedResponse, setCopiedResponse] = useState(false)
-  
+  const [showCopyOutput, setShowCopyOutput] = useState(false)
+
   const codeMirrorRef = useRef()
   const codeMirrorRefOut = useRef()
   const proxyCheckboxRef = useRef()
@@ -81,6 +82,7 @@ export default function Home() {
     axios(request)
       .then(response => {
         cmOoutput.getDoc().setValue(JSON.stringify(response.data, null, '    '))
+        setShowCopyOutput(true)
       })
       .catch(err => {
         cmOoutput.getDoc().setValue(JSON.stringify({
@@ -162,16 +164,18 @@ export default function Home() {
           </div>
 
           <div className="max-h-[500px] w-[700px] relative">
-            <div className="absolute z-10 right-0 top-0 text-white p-2 flex flex-col items-center justify-center">
-              {isCopiedResponse && (
-                <div className="-top-full absolute">
-                  <div className="arrow_box">Copied</div>
-                </div>
-              )}
-              <svg onClick={copyResponse} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-              </svg>
-            </div>
+            {showCopyOutput && (
+              <div className="absolute z-10 right-0 top-0 text-white p-2 flex flex-col items-center justify-center">
+                {isCopiedResponse && (
+                  <div className="-top-full absolute">
+                    <div className="arrow_box">Copied</div>
+                  </div>
+                )}
+                <svg onClick={copyResponse} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+              </div>
+            )}
             <textarea ref={codeMirrorRefOut}></textarea>
           </div>
         </div>
