@@ -7,7 +7,9 @@ import parseCurl from '../lib/parse-curl'
 export default function Home() {
   const [cmInput, setCodeMirror] = useState(null)
   const [cmOoutput, setCodeMirrorOut] = useState(null)
-
+  const [isCopied, setCopied] = useState(false)
+  const [isCopiedResponse, setCopiedResponse] = useState(false)
+  
   const codeMirrorRef = useRef()
   const codeMirrorRefOut = useRef()
   const proxyCheckboxRef = useRef()
@@ -47,12 +49,12 @@ export default function Home() {
 
   const runRequest = (e) => {
     e.preventDefault()
-    
+
     const source = cmInput.getValue()
     if (!source) {
       return;
     }
-    
+
     let request = parseCurl(source)
     if (!request) {
       alert("no value request")
@@ -87,6 +89,34 @@ export default function Home() {
       })
   }
 
+  const copyCurl = (e) => {
+    e.preventDefault()
+    const source = cmInput.getValue()
+    if (!source) {
+      return;
+    }
+    setCopied(true)
+    window.navigator.clipboard.writeText(cmInput.getValue());
+
+    setTimeout(() => {
+      setCopied(false)
+    }, 900)
+  }
+
+  const copyResponse = (e) => {
+    e.preventDefault()
+    const source = cmOoutput.getValue()
+    if (!source) {
+      return;
+    }
+    setCopiedResponse(true)
+    window.navigator.clipboard.writeText(cmOoutput.getValue());
+
+    setTimeout(() => {
+      setCopiedResponse(false)
+    }, 900)
+  }
+
   return (
     <div className="">
       <Head>
@@ -112,7 +142,17 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-8 max-w-[700px] mx-auto">
-          <div className="w-[700px] h-[200px] text-white">
+          <div className="w-[700px] h-[200px] text-white relative">
+            <div className="absolute z-10 right-0 p-2 flex flex-col items-center justify-center">
+              {isCopied && (
+                <div className="-top-full absolute">
+                  <div className="arrow_box">Copied</div>
+                </div>
+              )}
+              <svg onClick={copyCurl} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+            </div>
             <textarea ref={codeMirrorRef} placeholder="Paste curl here..."></textarea>
           </div>
 
@@ -121,7 +161,17 @@ export default function Home() {
             <label className="text-sm text-gray-500">Use proxy to baypass cors.</label>
           </div>
 
-          <div className="max-h-[500px] w-[700px]">
+          <div className="max-h-[500px] w-[700px] relative">
+            <div className="absolute z-10 right-0 top-0 text-white p-2 flex flex-col items-center justify-center">
+              {isCopiedResponse && (
+                <div className="-top-full absolute">
+                  <div className="arrow_box">Copied</div>
+                </div>
+              )}
+              <svg onClick={copyResponse} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+            </div>
             <textarea ref={codeMirrorRefOut}></textarea>
           </div>
         </div>

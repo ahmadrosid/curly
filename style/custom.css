@@ -22,6 +22,10 @@
     @apply text-blue-400
 }
 
+.CodeMirror .cm-def {
+    @apply text-blue-400
+}
+
 .CodeMirror .cm-number {
     @apply text-green-400
 }
@@ -30,3 +34,31 @@
     @apply text-red-400
 }
 
+.arrow_box {
+    @apply bg-gray-600 relative rounded px-2 py-1 text-sm;
+}
+
+.arrow_box:after, .arrow_box:before {
+	top: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: "";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color: rgba(75, 85, 99, 0);
+	border-top-color: rgba(75, 85, 99, 1);
+	border-width: 4px;
+	margin-left: -4px;
+}
+
+.arrow_box:before {
+	border-color: rgba(75, 85, 99, 0);
+	border-top-color: rgba(75, 85, 99, 1);
+	border-width: 7px;
+	margin-left: -7px;
+}
