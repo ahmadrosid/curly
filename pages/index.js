@@ -5,6 +5,10 @@ import { registerPlaceholderAddon } from '../lib/codemirror-placeholder'
 import parseCurl from '../lib/parse-curl'
 
 export default function Home() {
+  const placeHolder = `Paste curl here...
+Press ctrl+enter to perform request 
+Press ctrl+space to enable proxy`
+
   const [cmInput, setCodeMirror] = useState(null)
   const [cmOoutput, setCodeMirrorOut] = useState(null)
   const [isCopied, setCopied] = useState(false)
@@ -41,7 +45,24 @@ export default function Home() {
       instanceOutput.setSize("100%", "100%")
       setCodeMirrorOut(instanceOutput)
     }
+
+    window.addEventListener("keyup", handleKeyup);
+    return () => {
+      window.removeEventListener("keyup", handleKeyup);
+    };
   }, [])
+
+  const handleKeyup = (e) => {
+    const { key, ctrlKey } = e
+    if (key === 'Enter' && ctrlKey) {
+      runRequest(e)
+    }
+
+    if (key === ' ' && ctrlKey) {
+      proxyCheckboxRef.current.checked = !proxyCheckboxRef.current.checked
+      e.preventDefault()
+    }
+  }
 
   const clearTextArea = () => {
     cmInput.getDoc().setValue('')
@@ -155,7 +176,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
               </svg>
             </div>
-            <textarea ref={codeMirrorRef} placeholder="Paste curl here..."></textarea>
+            <textarea ref={codeMirrorRef} placeholder={placeHolder}></textarea>
           </div>
 
           <div className="flex gap-2 items-center">
